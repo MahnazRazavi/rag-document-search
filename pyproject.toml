@@ -1,0 +1,6 @@
+[dependency-groups]
+dev = [
+    "fastapi>=0.140.0",
+    "pydantic-settings>=2.14.2",
+    "uvicorn>=0.51.0",
+]
