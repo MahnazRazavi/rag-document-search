@@ -1,11 +1,6 @@
+from app.api.documents import router as document_router
 from fastapi import FastAPI
 
-app = FastAPI(
-    title="RAG Document Search",
-    version="0.1.0",
-)
+app = FastAPI()
 
-
-@app.get("/")
-async def root():
-    return {"status": "running"}
+app.include_router(document_router)
