@@ -1,7 +1,9 @@
 from app.db import get_db
+from app.repositories.document_content_repository import DocumentContentRepository
 from app.repositories.document_repository import DocumentRepository
 from app.schemas.document import DocumentResponse
 from app.services.document_service import DocumentService
+from app.services.pdf_extractor import PDFExtractor
 from app.services.storage_service import StorageService
 from fastapi import APIRouter, Depends, UploadFile
 from sqlalchemy.orm import Session
@@ -17,8 +19,10 @@ def upload_document(
     db: Session = get_db_dependency,
 ):
     repository = DocumentRepository(db)
+    content_repository = DocumentContentRepository(db)
     storage = StorageService()
+    pdf_extractor = PDFExtractor()
 
-    service = DocumentService(repository, storage)
+    service = DocumentService(repository, content_repository, storage, pdf_extractor)
 
     return service.upload(file)
