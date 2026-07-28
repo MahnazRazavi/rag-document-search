@@ -6,7 +6,7 @@ from app.db.base import Base
 from sqlalchemy import DateTime, Integer, String, func
 from sqlalchemy import Enum as SQLEnum
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 
 class DocumentStatus(str, Enum):
@@ -47,4 +47,10 @@ class Document(Base):
         DateTime(timezone=True),
         server_default=func.now(),
         onupdate=func.now(),
+    )
+
+    content = relationship(
+        "DocumentContent",
+        back_populates="document",
+        uselist=False,
     )
