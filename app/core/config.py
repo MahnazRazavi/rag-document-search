@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     app_name: str
     debug: bool = False
     database_url: str
+    chunk_size: int = 1000
+    chunk_overlap: int = 200
 
     model_config = SettingsConfigDict(
         env_file=".env",
