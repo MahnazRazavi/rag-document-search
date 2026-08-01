@@ -1,7 +1,9 @@
 from app.db import get_db
+from app.repositories.document_chunk_repository import DocumentChunkRepository
 from app.repositories.document_content_repository import DocumentContentRepository
 from app.repositories.document_repository import DocumentRepository
 from app.schemas.document import DocumentResponse
+from app.services.chunking_service import ChunkingService
 from app.services.document_service import DocumentService
 from app.services.pdf_extractor import PDFExtractor
 from app.services.storage_service import StorageService
@@ -20,9 +22,18 @@ def upload_document(
 ):
     repository = DocumentRepository(db)
     content_repository = DocumentContentRepository(db)
+    chunk_repository = DocumentChunkRepository(db)
     storage = StorageService()
     pdf_extractor = PDFExtractor()
+    chunking_service = ChunkingService()
 
-    service = DocumentService(repository, content_repository, storage, pdf_extractor)
+    service = DocumentService(
+        repository,
+        content_repository,
+        chunk_repository,
+        storage,
+        pdf_extractor,
+        chunking_service,
+    )
 
     return service.upload(file)
