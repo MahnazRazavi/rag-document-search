@@ -9,6 +9,11 @@ class Settings(BaseSettings):
     database_url: str
     chunk_size: int = 1000
     chunk_overlap: int = 200
+    qdrant_host: str = "localhost"
+    qdrant_port: int = 6333
+    qdrant_collection: str = "document_chunks"
+    embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
+    embedding_dimension: int = 384
 
     model_config = SettingsConfigDict(
         env_file=".env",

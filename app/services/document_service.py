@@ -7,6 +7,7 @@ from app.repositories.document_repository import DocumentRepository
 from app.services.chunking_service import ChunkingService
 from app.services.pdf_extractor import PDFExtractor
 from app.services.storage_service import StorageService
+from app.services.vector_indexing_service import VectorIndexingService
 
 
 class DocumentService:
@@ -18,6 +19,7 @@ class DocumentService:
         storage: StorageService,
         pdf_extractor: PDFExtractor,
         chunking_service: ChunkingService,
+        vector_indexing_service: VectorIndexingService,
     ):
         self.repository = repository
         self.content_repository = content_repository
@@ -25,6 +27,7 @@ class DocumentService:
         self.storage = storage
         self.pdf_extractor = pdf_extractor
         self.chunking_service = chunking_service
+        self.vector_indexing_service = vector_indexing_service
 
     def upload(self, uploaded_file):
         path = self.storage.save(uploaded_file)
@@ -65,7 +68,8 @@ class DocumentService:
             ]
 
             if chunks:
-                self.chunk_repository.bulk_create(chunks)
+                chunks = self.chunk_repository.bulk_create(chunks)
+                self.vector_indexing_service.index_chunks(chunks)
 
             document.status = DocumentStatus.INDEXED
             self.repository.create(document)
