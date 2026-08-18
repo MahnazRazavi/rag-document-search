@@ -14,6 +14,9 @@ class Settings(BaseSettings):
     qdrant_collection: str = "document_chunks"
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"
     embedding_dimension: int = 384
+    llm_api_key: str
+    llm_base_url: str = "https://api.openai.com/v1"
+    llm_model: str = "gpt-4.1-mini"
 
     model_config = SettingsConfigDict(
         env_file=".env",

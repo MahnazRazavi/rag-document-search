@@ -2,6 +2,9 @@ from app.core.config import settings
 from qdrant_client import QdrantClient
 from qdrant_client.models import (
     Distance,
+    FieldCondition,
+    Filter,
+    MatchValue,
     PointStruct,
     VectorParams,
 )
@@ -46,9 +49,23 @@ class QdrantService:
         self,
         vector: list[float],
         limit: int = 5,
+        document_id: str | None = None,
     ):
-        return self.client.search(
+        query_filter = None
+
+        if document_id:
+            query_filter = Filter(
+                must=[
+                    FieldCondition(
+                        key="document_id",
+                        match=MatchValue(value=document_id),
+                    )
+                ]
+            )
+
+        return self.client.query_points(
             collection_name=self.collection_name,
-            query_vector=vector,
+            query=vector,
+            query_filter=query_filter,
             limit=limit,
-        )
+        ).points
