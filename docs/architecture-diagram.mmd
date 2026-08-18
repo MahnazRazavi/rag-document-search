@@ -1,0 +1,23 @@
+flowchart TD
+
+    A[User] --> B[FastAPI]
+
+    B --> C[Document API]
+    B --> D[Chat API]
+
+    C --> E[Text Extraction]
+    E --> F[Chunking]
+    F --> G[Embedding Model]
+
+    G --> H[Qdrant]
+
+    C --> I[PostgreSQL]
+
+    D --> J[Query Embedding]
+    J --> H
+
+    H --> K[Top-K Chunks]
+    K --> L[Context Builder]
+    L --> M[LLM]
+
+    M --> N[Answer]
